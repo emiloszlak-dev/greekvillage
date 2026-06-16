@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ניהול · הכפר היווני בלאצ'י</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div class="gate" id="gate">
+  <div class="box">
+    <img src="https://cdn.issta.co.il/media/1226/logo_website_50.png" alt="איסתא">
+    <h2>מערכת ניהול דילים</h2>
+    <p>הכפר היווני בלאצ'י · איסתא</p>
+    <div class="field"><input id="pw" type="password" placeholder="סיסמה" onkeydown="if(event.key==='Enter')login()"></div>
+    <button class="btn block" onclick="login()">כניסה</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <div class="topbar"><div class="wrap topbar-inner">
+    <div class="brand-lock">
+      <img src="https://cdn.issta.co.il/media/1226/logo_website_50.png" alt="איסתא">
+      <span class="x">×</span><span class="gv-name">ניהול · הכפר היווני</span>
+    </div>
+    <a class="toplink" href="index.html" target="_blank">צפייה באתר ↗</a>
+  </div></div>
+
+  <div class="wrap admin">
+    <div class="banner" id="banner">⚠️ אין חיבור ל‑backend. ודאו שהאתר רץ על נטליפיי (לא נפתח כקובץ מקומי). שינויים לא יישמרו.</div>
+    <div class="admin-head"><div><h2>לוח ניהול</h2><div class="sub">דילים, גלריית תמונות, תוכן הדף ופניות — הכל נשמר במסד הנתונים של נטליפיי.</div></div></div>
+
+    <div class="tabs">
+      <button id="tabDeals" class="on" onclick="setTab('deals')">דילים <span class="count" id="cDeals">0</span></button>
+      <button id="tabGallery" onclick="setTab('gallery')">גלריית המלון <span class="count" id="cGallery">0</span></button>
+      <button id="tabContent" onclick="setTab('content')">תוכן הדף</button>
+      <button id="tabLeads" onclick="setTab('leads')">פניות <span class="count" id="cLeads">0</span></button>
+    </div>
+
+    <!-- DEALS -->
+    <div id="dealsTab"><div class="panel-grid">
+      <div class="card">
+        <div class="card-h"><span id="formTitle">דיל חדש</span><button class="mini" id="newBtn" onclick="resetForm()" style="display:none">+ חדש</button></div>
+        <div class="card-b">
+          <input type="hidden" id="f_id">
+          <div class="field"><label>כותרת הדיל</label><input id="f_title" placeholder="קיץ משפחתי בכפר היווני"></div>
+          <div class="field"><label>כותרת משנה</label><input id="f_subtitle" placeholder="הכל כלול · לאצ'י, קפריסין"></div>
+          <div class="row2">
+            <div class="field"><label>תאריך הלוך</label><input id="f_depart" type="date"></div>
+            <div class="field"><label>תאריך חזור</label><input id="f_return" type="date"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>מס' לילות</label><input id="f_nights" type="number" min="1" placeholder="4"></div>
+            <div class="field"><label>תגית</label>
+              <select id="f_badge"><option value="">ללא</option><option>בלעדי</option><option>רגע אחרון</option><option>מבצע השבוע</option><option>חבילת קיץ</option><option>חגי תשרי</option></select></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>מחיר נוכחי</label><input id="f_price" type="number" placeholder="699"></div>
+            <div class="field"><label>מטבע</label><select id="f_curr"><option>$</option><option>€</option><option>₪</option></select></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>מחיר קודם</label><input id="f_oldprice" type="number" placeholder="899"></div>
+            <div class="field"><label>המחיר מתייחס ל…</label>
+              <select id="f_priceper"><option>לאדם בזוג</option><option>לאדם בזוג+ילד</option><option>לאדם בזוג+2 ילדים</option><option>לזוג</option><option>למשפחה</option></select></div>
+          </div>
+          <div class="field"><label>מה כלול בחבילה</label>
+            <div class="checks">
+              <label class="chk"><input type="checkbox" id="f_flight" checked> טיסה ישירה לפאפוס</label>
+              <label class="chk"><input type="checkbox" id="f_transfer" checked> העברות</label>
+              <label class="chk"><input type="checkbox" id="f_board" checked> חצי פנסיון כשר</label>
+              <label class="chk"><input type="checkbox" id="f_lagoon" checked> לגונה הכחולה</label>
+              <label class="chk"><input type="checkbox" id="f_atv" checked> טרקטורונים</label>
+              <label class="chk"><input type="checkbox" id="f_water" checked> פארק מים אפרודיטה</label>
+            </div>
+          </div>
+          <div class="field"><label>הערות נוספות</label><textarea id="f_notes" rows="2" placeholder="בית כנסת חב״ד צמוד · מועדון ילדים · ספא"></textarea></div>
+          <div class="field"><label>תמונת הדיל</label>
+            <div class="uploader" onclick="document.getElementById('dealFile').click()"><b>+ העלאת תמונה</b><div style="font-size:12px;color:var(--muted);margin-top:3px">או בחרו מהגלריה למטה</div></div>
+            <input id="dealFile" type="file" accept="image/*" style="display:none" onchange="onDealFile(this)">
+            <div class="thumbs" id="dealGalleryPick"></div>
+            <input id="f_image" type="hidden">
+            <div id="dealImgPreview" style="margin-top:8px"></div>
+          </div>
+          <div class="field"><label class="chk" style="display:inline-flex"><input type="checkbox" id="f_feat"> דיל מודגש (מסגרת ירוקה)</label></div>
+          <div class="form-actions">
+            <button class="btn block" onclick="saveDeal()" id="saveBtn">פרסם דיל</button>
+            <button class="mini" onclick="resetForm()">ניקוי</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card-h" style="border:none;padding:0 4px 14px">דילים מפורסמים</div>
+        <div id="adminDeals"><div class="loading">טוען…</div></div>
+      </div>
+    </div></div>
+
+    <!-- GALLERY -->
+    <div id="galleryTab" style="display:none">
+      <div class="card"><div class="card-b">
+        <div class="uploader" onclick="document.getElementById('galFile').click()"><b>+ העלאת תמונות מלון</b><div style="font-size:12px;color:var(--muted);margin-top:3px">אפשר לבחור כמה תמונות יחד · התמונות יופיעו באתר הלקוחות</div></div>
+        <input id="galFile" type="file" accept="image/*" multiple style="display:none" onchange="onGalleryFiles(this)">
+        <div id="galStatus" style="font-size:13px;color:var(--muted);margin-top:10px"></div>
+        <div class="gallery-grid" id="galleryManage" style="margin-top:18px"></div>
+      </div></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div id="contentTab" style="display:none">
+      <div class="card" style="max-width:680px"><div class="card-b">
+        <div class="field"><label>כותרת ראשית (Hero)</label><input id="c_heroTitle"></div>
+        <div class="field"><label>טקסט ראשי (Hero)</label><textarea id="c_heroText" rows="3"></textarea></div>
+        <div class="field"><label>כותרת "הסיפור שלנו"</label><input id="c_aboutTitle"></div>
+        <div class="field"><label>טקסט "הסיפור שלנו"</label><textarea id="c_aboutText" rows="4"></textarea></div>
+        <div class="field"><label>כותרת "האוכל"</label><input id="c_foodTitle"></div>
+        <div class="field"><label>טקסט "האוכל"</label><textarea id="c_foodText" rows="4"></textarea></div>
+        <div class="field"><label>טלפון ליצירת קשר</label><input id="c_phone" placeholder="04-878-2020"></div>
+        <button class="btn" onclick="saveContent()">שמירת תוכן</button>
+      </div></div>
+    </div>
+
+    <!-- LEADS -->
+    <div id="leadsTab" style="display:none">
+      <div class="card"><div class="card-b" style="padding:0"><div id="leadsWrap"><div class="loading">טוען…</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ SIMPLE PASSWORD GATE ============
+   זו הגנה בסיסית בלבד (צד-לקוח). לשנות את הסיסמה כאן.
+   לאבטחה אמיתית: Netlify Identity או הגנת סיסמה ברמת האתר (ראו README). */
+const ADMIN_PASSWORD = "issta2026";
+
+function login(){
+  if(document.getElementById('pw').value===ADMIN_PASSWORD){
+    sessionStorage.setItem('gv_admin','1');
+    showApp();
+  } else { toast("סיסמה שגויה"); }
+}
+function showApp(){
+  document.getElementById('gate').style.display='none';
+  document.getElementById('app').style.display='block';
+  loadAll();
+}
+if(sessionStorage.getItem('gv_admin')==='1'){ window.addEventListener('DOMContentLoaded',showApp); }
+
+/* ============ state ============ */
+let DEALS=[], GALLERY=[], CONTENT={}, LEADS=[], selectedImg="";
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
+function esc(s){return(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function fmtDate(d){if(!d)return"";const p=d.split("-");return p.length===3?p[2]+"/"+p[1]:d;}
+function dateRange(a,b){const x=fmtDate(a),y=fmtDate(b);return x&&y?x+" – "+y:(x||y||"");}
+function showBanner(){document.getElementById('banner').classList.add('show');}
+
+/* ============ API helpers ============ */
+async function apiGet(type){const r=await fetch('/api?type='+type,{cache:'no-store'});if(!r.ok)throw 0;return r.json();}
+async function apiPost(type,body){const r=await fetch('/api?type='+type,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw 0;return r.json();}
+async function apiDel(type,id){const r=await fetch('/api?type='+type+'&id='+id,{method:'DELETE'});if(!r.ok)throw 0;}
+async function apiPatch(type,id){const r=await fetch('/api?type='+type+'&id='+id,{method:'PATCH'});if(!r.ok)throw 0;}
+
+async function loadAll(){
+  try{
+    const d=await apiGet('all');
+    DEALS=d.deals||[]; GALLERY=d.gallery||[]; CONTENT=d.content||{};
+    LEADS=await apiGet('leads');
+  }catch(e){ showBanner(); }
+  renderCounts(); renderDeals(); renderDealGalleryPick(); renderGalleryManage(); fillContent();
+}
+function renderCounts(){
+  document.getElementById('cDeals').textContent=DEALS.length;
+  document.getElementById('cGallery').textContent=GALLERY.length;
+  document.getElementById('cLeads').textContent=LEADS.filter(l=>l.status==='new').length;
+}
+
+/* ============ tabs ============ */
+function setTab(t){
+  ['deals','gallery','content','leads'].forEach(x=>{
+    document.getElementById(x+'Tab').style.display = x===t?'block':'none';
+    document.getElementById('tab'+x[0].toUpperCase()+x.slice(1)).classList.toggle('on',x===t);
+  });
+  if(t==='leads')renderLeads();
+}
+
+/* ============ image resize (client side) ============ */
+function resizeImage(file,maxDim=1400,quality=0.82){
+  return new Promise((res,rej)=>{
+    const fr=new FileReader();
+    fr.onload=()=>{const img=new Image();
+      img.onload=()=>{let{width:w,height:h}=img;
+        if(w>h&&w>maxDim){h=Math.round(h*maxDim/w);w=maxDim;}
+        else if(h>=w&&h>maxDim){w=Math.round(w*maxDim/h);h=maxDim;}
+        const c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        res(c.toDataURL('image/jpeg',quality));
+      };img.onerror=rej;img.src=fr.result;};
+    fr.onerror=rej;fr.readAsDataURL(file);
+  });
+}
+
+/* ============ DEALS ============ */
+function renderDeals(){
+  const wrap=document.getElementById('adminDeals');
+  if(!DEALS.length){wrap.innerHTML='<div class="empty"><h3>עדיין אין דילים</h3><p>מלאו את הטופס ולחצו "פרסם דיל".</p></div>';return;}
+  wrap.innerHTML=[...DEALS].sort((a,b)=>b.created-a.created).map(d=>`
+    <div class="admin-deal">
+      <img src="${d.image||(GALLERY[0]&&GALLERY[0].src)||''}">
+      <div class="info"><h4>${esc(d.title)} ${d.feat?'⭐':''}</h4>
+        <div class="ln">${dateRange(d.depart,d.ret)||'ללא תאריך'} · ${d.nights||'-'} לילות ${d.badge?'· '+esc(d.badge):''}</div>
+        <div class="pr">${d.curr}${d.price} <span style="font-weight:400;color:var(--muted);font-size:12px">${esc(d.pricePer||'')}</span></div>
+        <span class="tag ${d.active?'':'off'}">${d.active?'פעיל באתר':'מוסתר'}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="mini" onclick="editDeal('${d.id}')">עריכה</button>
+        <button class="mini" onclick="toggleActive('${d.id}')">${d.active?'הסתר':'הצג'}</button>
+        <button class="mini del" onclick="delDeal('${d.id}')">מחיקה</button>
+      </div></div>`).join('');
+}
+function renderDealGalleryPick(){
+  const box=document.getElementById('dealGalleryPick');
+  if(!GALLERY.length){box.innerHTML='<div style="font-size:12px;color:var(--muted);margin-top:8px">העלו תמונות בלשונית "גלריית המלון" כדי לבחור מהן.</div>';return;}
+  box.innerHTML=GALLERY.map(g=>`<div class="th"><img src="${g.src}" class="${g.src===selectedImg?'sel':''}" onclick="chooseDealImg('${g.id}')"></div>`).join('');
+}
+function chooseDealImg(gid){const g=GALLERY.find(x=>x.id===gid);if(!g)return;selectedImg=g.src;document.getElementById('f_image').value=g.src;renderDealGalleryPick();showDealPreview();}
+async function onDealFile(input){
+  if(!input.files[0])return;
+  document.getElementById('dealImgPreview').innerHTML='<span style="font-size:13px;color:var(--muted)">מעבד תמונה…</span>';
+  const data=await resizeImage(input.files[0],1300,0.82);
+  selectedImg=data;document.getElementById('f_image').value=data;showDealPreview();renderDealGalleryPick();
+}
+function showDealPreview(){
+  const v=document.getElementById('f_image').value;
+  document.getElementById('dealImgPreview').innerHTML=v?`<img src="${v}" style="width:120px;height:80px;object-fit:cover;border-radius:10px;border:2px solid var(--issta)">`:'';
+}
+function readForm(){return{
+  id:document.getElementById('f_id').value||id(),
+  title:document.getElementById('f_title').value.trim(),
+  subtitle:document.getElementById('f_subtitle').value.trim(),
+  depart:document.getElementById('f_depart').value,ret:document.getElementById('f_return').value,
+  nights:+document.getElementById('f_nights').value||null,
+  price:+document.getElementById('f_price').value||0,
+  oldPrice:+document.getElementById('f_oldprice').value||null,
+  curr:document.getElementById('f_curr').value,pricePer:document.getElementById('f_priceper').value,
+  badge:document.getElementById('f_badge').value,
+  flight:document.getElementById('f_flight').checked,transfer:document.getElementById('f_transfer').checked,
+  board:document.getElementById('f_board').checked,lagoon:document.getElementById('f_lagoon').checked,
+  atv:document.getElementById('f_atv').checked,water:document.getElementById('f_water').checked,
+  notes:document.getElementById('f_notes').value.trim(),
+  image:document.getElementById('f_image').value||selectedImg,
+  feat:document.getElementById('f_feat').checked,active:true
+};}
+async function saveDeal(){
+  const d=readForm();
+  if(!d.title){toast("נא להזין כותרת");return;}
+  if(!d.price){toast("נא להזין מחיר");return;}
+  const ex=DEALS.find(x=>x.id===d.id);
+  d.created=ex?ex.created:Date.now(); d.active=ex?ex.active:true;
+  try{ await apiPost('deals',d); }catch(e){toast("שמירה נכשלה — אין חיבור ל‑backend");return;}
+  const i=DEALS.findIndex(x=>x.id===d.id); if(i>=0)DEALS[i]=d; else DEALS.unshift(d);
+  toast(ex?"הדיל עודכן ✓":"הדיל פורסם ✓"); resetForm(); renderDeals(); renderCounts();
+}
+function editDeal(did){
+  const d=DEALS.find(x=>x.id===did);if(!d)return;
+  const v=(i,val)=>document.getElementById(i).value=val, c=(i,val)=>document.getElementById(i).checked=val;
+  v('f_id',d.id);v('f_title',d.title||'');v('f_subtitle',d.subtitle||'');v('f_depart',d.depart||'');v('f_return',d.ret||'');
+  v('f_nights',d.nights||'');v('f_price',d.price||'');v('f_oldprice',d.oldPrice||'');v('f_curr',d.curr||'$');
+  v('f_priceper',d.pricePer||'לאדם בזוג');v('f_badge',d.badge||'');v('f_notes',d.notes||'');v('f_image',d.image||'');
+  c('f_flight',!!d.flight);c('f_transfer',!!d.transfer);c('f_board',!!d.board);c('f_lagoon',!!d.lagoon);c('f_atv',!!d.atv);c('f_water',!!d.water);c('f_feat',!!d.feat);
+  selectedImg=d.image||''; showDealPreview(); renderDealGalleryPick();
+  document.getElementById('formTitle').textContent='עריכת דיל';
+  document.getElementById('saveBtn').textContent='שמור שינויים';
+  document.getElementById('newBtn').style.display='inline-block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function resetForm(){
+  ['f_id','f_title','f_subtitle','f_depart','f_return','f_nights','f_price','f_oldprice','f_notes','f_image'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('f_curr').value='$';document.getElementById('f_priceper').value='לאדם בזוג';document.getElementById('f_badge').value='';
+  ['f_flight','f_transfer','f_board','f_lagoon','f_atv','f_water'].forEach(i=>document.getElementById(i).checked=true);
+  document.getElementById('f_feat').checked=false; selectedImg=''; showDealPreview(); renderDealGalleryPick();
+  document.getElementById('formTitle').textContent='דיל חדש';
+  document.getElementById('saveBtn').textContent='פרסם דיל';
+  document.getElementById('newBtn').style.display='none';
+}
+async function toggleActive(did){const d=DEALS.find(x=>x.id===did);if(!d)return;d.active=!d.active;try{await apiPost('deals',d);}catch(e){toast("נכשל");return;}renderDeals();}
+async function delDeal(did){if(!confirm('למחוק את הדיל?'))return;try{await apiDel('deals',did);}catch(e){toast("נכשל");return;}DEALS=DEALS.filter(x=>x.id!==did);renderDeals();renderCounts();toast("נמחק");}
+
+/* ============ GALLERY ============ */
+async function onGalleryFiles(input){
+  const files=[...input.files]; if(!files.length)return;
+  const st=document.getElementById('galStatus');
+  for(let i=0;i<files.length;i++){
+    st.textContent=`מעלה תמונה ${i+1} מתוך ${files.length}…`;
+    const src=await resizeImage(files[i],1500,0.82);
+    const item={id:id(),src,created:Date.now()};
+    try{ await apiPost('gallery',item); GALLERY.unshift(item); }
+    catch(e){ st.textContent="העלאה נכשלה — אין חיבור ל‑backend"; return; }
+  }
+  st.textContent=`✓ הועלו ${files.length} תמונות`; input.value='';
+  renderGalleryManage(); renderDealGalleryPick(); renderCounts();
+  setTimeout(()=>st.textContent='',3000);
+}
+function renderGalleryManage(){
+  const box=document.getElementById('galleryManage');
+  if(!GALLERY.length){box.innerHTML='<div class="empty" style="grid-column:1/-1"><h3>אין תמונות עדיין</h3><p>העלו תמונות של המלון — הן יופיעו באתר הלקוחות ובבחירת תמונה לדיל.</p></div>';return;}
+  box.innerHTML=GALLERY.map(g=>`<div class="th" style="position:relative"><img src="${g.src}" onclick="lbox('${g.src.replace(/'/g,"\\'")}')"><div class="rm" onclick="delGallery('${g.id}')" title="מחיקה">×</div></div>`).join('');
+}
+async function delGallery(gid){if(!confirm('למחוק את התמונה?'))return;try{await apiDel('gallery',gid);}catch(e){toast("נכשל");return;}GALLERY=GALLERY.filter(x=>x.id!==gid);renderGalleryManage();renderDealGalleryPick();renderCounts();}
+function lbox(src){const w=window.open('');w.document.write(`<img src="${src}" style="max-width:100%">`);}
+
+/* ============ CONTENT ============ */
+function fillContent(){
+  const c=CONTENT;
+  document.getElementById('c_heroTitle').value=c.heroTitle||'';
+  document.getElementById('c_heroText').value=c.heroText||'';
+  document.getElementById('c_aboutTitle').value=c.aboutTitle||'';
+  document.getElementById('c_aboutText').value=c.aboutText||'';
+  document.getElementById('c_foodTitle').value=c.foodTitle||'';
+  document.getElementById('c_foodText').value=c.foodText||'';
+  document.getElementById('c_phone').value=c.phone||'';
+}
+async function saveContent(){
+  const c={
+    heroTitle:document.getElementById('c_heroTitle').value.trim(),
+    heroText:document.getElementById('c_heroText').value.trim(),
+    aboutTitle:document.getElementById('c_aboutTitle').value.trim(),
+    aboutText:document.getElementById('c_aboutText').value.trim(),
+    foodTitle:document.getElementById('c_foodTitle').value.trim(),
+    foodText:document.getElementById('c_foodText').value.trim(),
+    phone:document.getElementById('c_phone').value.trim()
+  };
+  try{ await apiPost('content',c); CONTENT=c; toast("התוכן נשמר ✓"); }
+  catch(e){ toast("שמירה נכשלה — אין חיבור ל‑backend"); }
+}
+
+/* ============ LEADS ============ */
+function renderLeads(){
+  const w=document.getElementById('leadsWrap');
+  if(!LEADS.length){w.innerHTML='<div class="empty" style="border:none"><h3>אין פניות עדיין</h3><p>פניות מהאתר יופיעו כאן אוטומטית.</p></div>';return;}
+  w.innerHTML=`<table class="leads"><thead><tr><th>שם</th><th>טלפון</th><th>נוסעים</th><th>דיל</th><th>התקבל</th><th>סטטוס</th><th></th></tr></thead><tbody>
+    ${[...LEADS].sort((a,b)=>b.created-a.created).map(l=>`<tr>
+      <td><b>${esc(l.name)}</b>${l.email?`<div class="ln" style="font-size:12px;color:var(--muted)">${esc(l.email)}</div>`:''}</td>
+      <td><a class="lk" href="tel:${esc(l.phone)}">${esc(l.phone)}</a> · <a class="lk" href="https://wa.me/${(l.phone||'').replace(/\D/g,'').replace(/^0/,'972')}" target="_blank">WhatsApp</a></td>
+      <td>${esc(l.pax||'')}</td><td>${esc(l.dealTitle||'')}</td>
+      <td>${new Date(l.created).toLocaleDateString('he-IL')}<div class="ln" style="font-size:12px;color:var(--muted)">${new Date(l.created).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}</div></td>
+      <td><span class="lead-status ${l.status==='done'?'done':''}">${l.status==='done'?'טופל':'חדש'}</span></td>
+      <td><button class="mini" onclick="toggleLead('${l.id}')">${l.status==='done'?'החזר':'סמן טופל'}</button></td>
+    </tr>`).join('')}</tbody></table>`;
+}
+async function toggleLead(lid){const l=LEADS.find(x=>x.id===lid);if(!l)return;try{await apiPatch('leads',lid);}catch(e){toast("נכשל");return;}l.status=l.status==='done'?'new':'done';renderLeads();renderCounts();}
+</script>
+</body>
+</html>
